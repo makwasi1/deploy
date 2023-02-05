@@ -81,7 +81,7 @@ export const Swap = () => {
 
   const sendAdaFunction = async () => {
     const tx = new Transaction({ initiator: wallet }).sendLovelace(
-      'addr_test1qr4gqrz9fmrx35feunnzvqhmtu92dn7rsjwj3yuf309pg2lycdh36e8cnkxqvuxrssfjkrextp4rnqea6lwanwd0gdvqvtjkah',
+      process.env.NEXT_PUBLIC_ADA_WALLET,
       amount.toString()
     );
     const unsignedTx = await tx.build();
