@@ -186,7 +186,7 @@ export const Swap = () => {
       order_number: orderId
       }
     }
-    await fetch('http://localhost:3000/api/transactions', {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}transactions`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
