@@ -46,9 +46,23 @@ export async function getServerSideProps() {
       "Content-Type": "application/json",
     },
   });
-  const transactions = await res.json();
-  // return props
-  return {
-    props: { transactions },
-  };
+  try {
+    if(res.status == 200){
+      console.log("ok")
+      const transactions = await res.json();
+      return {
+        props: { transactions },
+      };
+    } else {
+      console.log("error")
+      return {
+        props: { transactions: [] },
+      };
+    }
+  } catch (error) {
+    console.log("error")
+    return {
+      props: { transactions: [] },
+    };
+  }
 }
