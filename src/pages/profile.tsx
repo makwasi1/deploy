@@ -9,10 +9,12 @@ interface IndexProps {
   transactions: Array<TransactionWallet>;
 }
 
-const History = dynamic(() => import("@/components").then((mod) => mod.History), { ssr: false });
+const History = dynamic(
+  () => import("@/components").then((mod) => mod.History),
+  { ssr: false }
+);
 
-
-export default function Home( props: IndexProps) {
+export default function Home(props: IndexProps) {
   const { transactions } = props;
   return (
     <>
@@ -38,7 +40,12 @@ export default function Home( props: IndexProps) {
 
 export async function getServerSideProps() {
   // get todo data from API
-  const res = await fetch(`${process.env.API_URL}transactions`);
+  const res = await fetch(`${process.env.API_URL}transactions`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
   const transactions = await res.json();
   // return props
   return {
