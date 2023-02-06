@@ -40,23 +40,18 @@ export default function Home(props: IndexProps) {
 
 export async function getServerSideProps() {
   // get todo data from API
-  const res = await fetch(`${process.env.API_URL}transactions`, {
+  const res = await fetch(`${process.env.API_URL}transactions`,{
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-    },
+    }
   });
   try {
     if(res.status == 200){
       console.log("ok")
-      const transactions = await res.json();
+      const trans = await res.json();
       return {
-        props: { transactions },
-      };
-    } else {
-      console.log("error")
-      return {
-        props: { transactions: [] },
+        props: { transactions: trans },
       };
     }
   } catch (error) {
