@@ -16,7 +16,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { DarkModeIcon, LightModeIcon, Logo, NavItem, PrimaryButton } from "./common";
-import useWallet from '../context/wallet'
+import useWallet from '@/context/WalletContext'
 import { ConnectWallet } from "./ConnectWallet";
 
 const EWalletIcon = () => <Image src={EWallet} alt="EWallet" width={20} height={20} />;
@@ -65,7 +65,7 @@ export const NavBar = () => {
         }}
       >
         <Stack spacing={2} justifyContent="flex-start">
-          <NavItem href="/">Exchange</NavItem>
+        {walletConnected ? <NavItem href="/connected">Exchange</NavItem>: <NavItem href="/">Exchange</NavItem>}
           <NavItem href="/profile">Profile</NavItem>
           <NavItem href="/about">About</NavItem>
           {pathname === "/" ? (
@@ -94,8 +94,8 @@ export const NavBar = () => {
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={5}>
         <Stack direction="row" spacing={4} justifyContent="flex-end">
-          <NavItem href="/">Exchange</NavItem>
-          <NavItem href="/profile">Profile</NavItem>
+          {walletConnected ? <NavItem href="/connected">Exchange</NavItem>: <NavItem href="/">Exchange</NavItem>}
+          {!walletConnected ? <NavItem href="/profile">Profile</NavItem>: <NavItem href={`/transaction/${connectedAddress}`}>Profile</NavItem>}
           <NavItem href="/about">About</NavItem>
         </Stack>
       </Grid>

@@ -1,0 +1,8 @@
+{
+    "exportall.config.folderListener": [
+        "/src",
+        "/src/components/common",
+        "/src/lib",
+        "/src/components"
+    ]
+}

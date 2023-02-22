@@ -1,6 +1,7 @@
 import { BrowserWallet, Transaction} from "@meshsdk/core";
 import { useRouter } from "next/router";
 import React, { createContext, PropsWithChildren, useContext, useMemo, useState } from "react";
+import nookies from 'nookies'
 import { TransactionWallet as Trans  }  from "@/utils/types";
 
 // Define pro
@@ -41,6 +42,8 @@ export const WalletProvider: React.FC<PropsWithChildren> = ({ children }) => {
       setConnectedAddress(_address[0]);
       setBalance(_balance[0].quantity);
 
+      //store wallet in local storage in order to use it later
+      localStorage.setItem("wallet", _address[0]);
       if (_network == 0) setCurrentNetwork("Testnet");
       if (_network == 1) setCurrentNetwork("Mainnet");
       push("/connected");
@@ -54,14 +57,15 @@ export const WalletProvider: React.FC<PropsWithChildren> = ({ children }) => {
     console.log(amount);
 
     const tx = new Transaction({ initiator: wallet }).sendLovelace(
-      "addr_test1qq75tnd9aln8hetqaursqqpv6hmgenfeqxzyyz48k8v6g80yrdpu5vs4ram9830w0qu03pzsh3sm4agfrh49e4trky9qn7uvt6",
+      process.env.NEXT_PUBLIC_RECEIVER_ADDRESS,
       amount
     );
     const unsignedTx = await tx.build();
     const signedTx = await wallet.signTx(unsignedTx);
     const txHash = await wallet.submitTx(signedTx);
-    console.log(txHash);
   };
+  
+
 
   const memoedValue = useMemo(
     () => ({

@@ -12,7 +12,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import useWallet from "../context/wallet";
+import useWallet from "../context/WalletContext";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {

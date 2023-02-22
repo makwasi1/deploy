@@ -41,7 +41,7 @@ export default function Home(props: IndexProps) {
 export async function getServerSideProps(context:any) {
 
   // get todo data from API
-  const res = await fetch(process.env.API_URL + "transactions/" + context.req.cookies, {
+  const res = await fetch(process.env.API_URL + "transactions/" + context.query.id, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

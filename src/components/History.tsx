@@ -2,6 +2,7 @@ import { TransactionWallet } from "@/utils/types";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import SearchIcon from "@mui/icons-material/Search";
+import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
@@ -14,6 +15,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
+import Link from "next/link";
 import * as React from "react";
 import { Input, SelectInput } from "./common";
 
@@ -54,6 +56,11 @@ function createData(
 function Row(props: { row:  TransactionWallet }) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
+
+  const onOpen = (hash: string) => {
+    window.open(`https://preprod.cardanoscan.io/transaction/${hash}`, '_blank');
+  };
+
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
@@ -62,9 +69,11 @@ function Row(props: { row:  TransactionWallet }) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        {/* <TableCell component="th" scope="row">
-          {row.amount}
-        </TableCell> */}
+        <TableCell component="th" scope="row">
+        <Button variant="contained" disableElevation sx={{ borderRadius: 2 }} onClick={() => onOpen(row.transaction_hash)} >
+          Check Transaction
+        </Button>
+        </TableCell>
         {Object.entries(row).map(([key, value]) => {
           if (key !== "date" && key !== "history") {
             return <TableCell key={key}>{value.toString()}</TableCell>;
@@ -121,11 +130,11 @@ function Row(props: { row:  TransactionWallet }) {
 // });
 
 const columns: readonly { id: string; label: string; minWidth: number }[] = [
-  // {
-  //   id: "id",
-  //   label: "Transaction Hash",
-  //   minWidth: 120,
-  // },
+  {
+    id: "id",
+    label: "Verify",
+    minWidth: 120,
+  },
   {
     id: "name",
     label: "Reciever Name",
@@ -152,15 +161,15 @@ const columns: readonly { id: string; label: string; minWidth: number }[] = [
     minWidth: 170,
   },
   {
-    id: "statue",
+    id: "status",
     label: "Status",
     minWidth: 170,
   },
-  {
-    id: "wallet",
-    label: "Wallet Address",
-    minWidth: 170,
-  },
+  // {
+  //   id: "wallet",
+  //   label: "Wallet Address",
+  //   minWidth: 170,
+  // },
 ];
 
 interface IndexProps {

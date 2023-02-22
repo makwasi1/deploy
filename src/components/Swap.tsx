@@ -16,9 +16,11 @@ import { ConnectWallet } from "./ConnectWallet";
 import { Currency } from "./Currency";
 import { BrowserWallet, Transaction, Wallet } from '@meshsdk/core';
 import { useEffect } from 'react';
-import useWallet from '../context/wallet';
+import useWallet from '../context/WalletContext';
 import { TransactionWallet as Trans  }  from "@/utils/types";
 import { AlertDialog } from "./common/Alert";
+import { truncateLovelaces } from "@/lib/adresse";
+import { ConfirmTransaction } from "./ConfirmTrasnsaction";
 
 
 
@@ -33,6 +35,7 @@ export const Swap = () => {
   const [swap, setSwap] = useState(false);
   const [open, setOpen] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
   const { pathname, push } = useRouter();
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [selectedWallet, setSelectedWallet] = useState<BrowserWallet>();
@@ -57,6 +60,8 @@ export const Swap = () => {
   const onClose = () => setOpen(false);
   const onOpenAlert = () => setOpenAlert(true);
   const onCloseAlert = () => setOpenAlert(false);
+  const onCloseConfirm = () => setOpenConfirm(false);
+  const onOpenConfirm = () => setOpenConfirm(true);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(parseInt(event.target.value));
     //convert ada to dollar
@@ -99,7 +104,7 @@ export const Swap = () => {
 
 
   const handleMobileMoney = async (amount: string, txHash: string) => {
-    let token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcL2xvZ2luIiwicm9sZXMiOlsiTUVSQ0hBTlQiXSwiZXhwIjoxNzMwMDE2NzgzLCJzdWIiOiI0NTA5Y2Q3ZWVlZDU3YjkzNjlmZTZlMmMwN2NmMDEwZiJ9.o_J3EfDubqHM4h9ZNAxSpkenMoIWIBcq79cqzzqOdq8';
+    let token = process.env.NEXT_PUBLIC_TOKEN;
     let usdToCdf = 2043;
     // Make the API request body for momo api 
     const body = {
@@ -127,7 +132,6 @@ export const Swap = () => {
       if(orderNumber !== null && orderNumber !== undefined){
         setOrderNumber(orderNumber);
         console.log("Order Number: "+orderNumber);
-        
         await handleMobileMoneyTransaction(txHash,orderNumber);
       } else {
         throw new Error("Order number is null");
@@ -139,7 +143,7 @@ export const Swap = () => {
   useEffect(() => {
     //fetch data from coinbase api
     getAdaExchangeInUsd();
-  },[adarate]);
+  },[]);
 
   const getAdaExchangeInUsd = async () => {
     var res =  await fetch('https://api.coincap.io/v2/assets/cardano', {
@@ -154,7 +158,6 @@ export const Swap = () => {
       var rate = (data['data']['priceUsd']);
       let newRate = parseFloat(rate);
       let roundedRate = Number(newRate.toFixed(4));
-      
       setAdarate(roundedRate);
      }
     };
@@ -186,8 +189,9 @@ export const Swap = () => {
       order_number: orderId
       }
     }
+
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}transactions`, {
-      method: "post",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -207,10 +211,19 @@ export const Swap = () => {
    }
   }, [walletConnected])
 
+  const confirmProps = {
+    "amount": amount,
+    "dollar": dollar,
+    "phoneNumber": phoneNumber,
+    "country": country,
+    "name": name,
+  }
+//TODO: complete the confirm transaction component
   return (
     <>
-      <AlertDialog open={openAlert} onClose={onCloseAlert} />
+      <AlertDialog open={openAlert} onClose={onCloseAlert}  />
       <ConnectWallet open={open} onClose={onClose} />
+      <ConfirmTransaction  open={openConfirm} onClose={onCloseConfirm} amount={amount} phone={phoneNumber} receiver={name} onConfirm={sendAdaFunction} />
       <Paper variant="outlined" component={Stack} spacing={1} sx={{ borderRadius: 2, px: 4, py: 2 }}>
         <Typography variant="h6" textAlign="center" component="h1" gutterBottom>
           Swap
@@ -307,7 +320,7 @@ export const Swap = () => {
             of this site and for this application
           </Typography>
         </Stack>
-        <PrimaryButton icon={walletConnected ? null : <EWalletIcon />} onClick={walletConnected ? () => sendAdaFunction(): onOpen}>
+        <PrimaryButton icon={walletConnected ? null : <EWalletIcon />} onClick={walletConnected ? onOpenConfirm : onOpen}>
           {walletConnected ? "Submit" : "Connect Wallet"}
         </PrimaryButton>
       </Paper>

@@ -8,3 +8,4 @@ export * from "./History";
 export * from "./NavBar";
 export * from "./Swap";
 export * from "./Wallet";
+export * from "./ConfirmTrasnsaction";

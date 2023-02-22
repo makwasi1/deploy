@@ -13,7 +13,7 @@ import NextNprogress from "nextjs-progressbar";
 import { IntlProvider } from "react-intl";
 import { MeshProvider } from "@meshsdk/react";
 import "../styles/globals.css";
-import { WalletProvider } from "@/context/wallet";
+import { WalletProvider } from "@/context/WalletContext";
 
 export const languages = {
   en,
