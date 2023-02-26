@@ -149,7 +149,7 @@ export default function Home() {
         <Grid container sx={{ mt: 6, py: 2 }} spacing={4}>
           <Grid item xs={12} md={8}>
             <Stack>
-              <Logo />
+              
               <Typography color="accent.main" sx={{ width: { xs: 1, md: 300 } }}>
                 Lorem ipsum dolor sit amet, consec adipiscing elit ut ali, purus sit ame elit ut aliqu ipsum dolor sit.
               </Typography>

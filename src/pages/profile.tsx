@@ -1,4 +1,5 @@
 import { Wallet } from "@/components";
+import useWallet from "@/context/WalletContext";
 import { TransactionWallet } from "@/utils/types";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -15,6 +16,7 @@ const History = dynamic(
 );
 
 export default function Home(props: IndexProps) {
+  const { walletConnected } = useWallet();
   const { transactions } = props;
   return (
     <>
@@ -27,7 +29,7 @@ export default function Home(props: IndexProps) {
       <Box>
         <Grid container spacing={6}>
           <Grid item xs sm={3.5}>
-            <Wallet />
+           {walletConnected ? (<Wallet />) : (null)} 
           </Grid>
           <Grid item xs={12} sm={8} md={8.5}>
             <History transactions={transactions} />

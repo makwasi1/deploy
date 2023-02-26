@@ -101,16 +101,18 @@ export const NavBar = () => {
       </Grid>
       <Grid item xs={12} sm={6} md={6} lg={5} justifyContent="flex-end">
         <Stack direction="row" spacing={2} justifyContent="flex-end">
-          {pathname === "/" ? (
-            <PrimaryButton icon={<EWalletIcon />} onClick={walletConnected ? () =>{} : onOpen}>Connect Wallet</PrimaryButton>
+          {walletConnected ? (
+            <>
+           <PrimaryButton icon={<FiberManualRecordIcon color="success" />}>{currentNetwork}</PrimaryButton>
+           <PrimaryButton>
+             {truncateAddress(
+               connectedAddress
+             )}
+           </PrimaryButton>
+           </>
           ) : (
             <>
-              <PrimaryButton icon={<FiberManualRecordIcon color="success" />}>{currentNetwork}</PrimaryButton>
-              <PrimaryButton>
-                {truncateAddress(
-                  connectedAddress
-                )}
-              </PrimaryButton>
+             <PrimaryButton icon={<EWalletIcon />} onClick={walletConnected ? () =>{} : onOpen}>Connect Wallet</PrimaryButton>
             </>
           )}
           <IconButton onClick={() => (darkModeActive ? switchToLightMode() : switchToDarkMode())}>

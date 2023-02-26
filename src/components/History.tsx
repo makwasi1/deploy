@@ -19,39 +19,6 @@ import Link from "next/link";
 import * as React from "react";
 import { Input, SelectInput } from "./common";
 
-function createData(
-  date: string,
-  type: string,
-  status: string,
-  name: string,
-  number: string,
-  sent: string,
-  fees: string,
-  received: string
-) {
-  return {
-    date,
-    type,
-    status,
-    name,
-    number,
-    sent,
-    fees,
-    received,
-    history: [
-      {
-        date: "2020-01-05",
-        customerId: "11091700",
-        amount: 3,
-      },
-      {
-        date: "2020-01-02",
-        customerId: "Anonymous",
-        amount: 1,
-      },
-    ],
-  };
-}
 
 function Row(props: { row:  TransactionWallet }) {
   const { row } = props;
@@ -71,7 +38,7 @@ function Row(props: { row:  TransactionWallet }) {
         </TableCell>
         <TableCell component="th" scope="row">
         <Button variant="contained" disableElevation sx={{ borderRadius: 2 }} onClick={() => onOpen(row.transaction_hash)} >
-          Check Transaction
+          Verify
         </Button>
         </TableCell>
         {Object.entries(row).map(([key, value]) => {

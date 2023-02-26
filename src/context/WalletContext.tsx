@@ -44,6 +44,7 @@ export const WalletProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
       //store wallet in local storage in order to use it later
       localStorage.setItem("wallet", _address[0]);
+      localStorage.setItem("walletName", walletName);
       if (_network == 0) setCurrentNetwork("Testnet");
       if (_network == 1) setCurrentNetwork("Mainnet");
       push("/connected");

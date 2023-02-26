@@ -51,7 +51,7 @@ export const Swap = () => {
   const [orderNumber, setOrderNumber] = useState("");
 
   const { API_URL, TOKEN, ADA_WALLET } = process.env
-  
+  const connectedWalletName = localStorage.getItem("walletName");
 
   //  walletConnected = pathname !== "/";
 
@@ -143,7 +143,13 @@ export const Swap = () => {
   useEffect(() => {
     //fetch data from coinbase api
     getAdaExchangeInUsd();
-  },[]);
+    //connect wallet from wallet name from local storage
+
+    if(connectedWalletName !== null && connectedWalletName !== undefined){
+    connectWallet(connectedWalletName);
+    
+    }
+  },[walletConnected]);
 
   const getAdaExchangeInUsd = async () => {
     var res =  await fetch('https://api.coincap.io/v2/assets/cardano', {
@@ -211,19 +217,13 @@ export const Swap = () => {
    }
   }, [walletConnected])
 
-  const confirmProps = {
-    "amount": amount,
-    "dollar": dollar,
-    "phoneNumber": phoneNumber,
-    "country": country,
-    "name": name,
-  }
+  
 //TODO: complete the confirm transaction component
   return (
     <>
       <AlertDialog open={openAlert} onClose={onCloseAlert}  />
       <ConnectWallet open={open} onClose={onClose} />
-      <ConfirmTransaction  open={openConfirm} onClose={onCloseConfirm} amount={amount} phone={phoneNumber} receiver={name} onConfirm={sendAdaFunction} />
+      <ConfirmTransaction  open={openConfirm} onClose={onCloseConfirm} amount={amount} phone={phoneNumber} receiver={name} onConfirm={sendAdaFunction} dollar={dollar} />
       <Paper variant="outlined" component={Stack} spacing={1} sx={{ borderRadius: 2, px: 4, py: 2 }}>
         <Typography variant="h6" textAlign="center" component="h1" gutterBottom>
           Swap
